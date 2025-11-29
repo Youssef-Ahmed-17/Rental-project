@@ -9,7 +9,7 @@ class Database
     private $username = "root";
     private $password = "";
 	// Write database name here
-    private $dbname = "";
+    private $dbname = "Rental_project_db";
 
 
     // Private constructor → Singleton
