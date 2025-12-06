@@ -1,75 +1,33 @@
 <?php
+require_once _DIR_.'/../core/Database.php';
 
-class User
-{
+class User {
     private $db;
 
-    public function __construct()
-    {
-        // Use the singleton
-        $this->db = Database::getInstance()->getConnection();
+    public function __construct() {
+        $this->db = new Database();
     }
 
-
-    /* CREATE USER */
-    public function createUser($name, $email, $age)
-    {
-        $sql = "INSERT INTO users (name, email, age) 
-                VALUES (:name, :email, :age)";
-
-        $stmt = $this->db->prepare($sql);
-
+    public function create($data) {
+        $stmt = $this->db->prepare("INSERT INTO users (name, email, password, phone, city, national_id, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
         return $stmt->execute([
-            ":name"  => $name,
-            ":email" => $email,
-            ":age"   => $age
+            $data['name'],
+            $data['email'],
+            password_hash($data['password'], PASSWORD_DEFAULT),
+            $data['phone'],
+            $data['city'],
+            $data['national_id'],
+            $data['role_id']
         ]);
     }
 
-    /* GET ONE USER */
-    public function getUserById($id)
-    {
-        $sql = "SELECT * FROM users WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([":id" => $id]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    public function findByEmail($email) {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetch();
     }
 
-    /* GET ALL USERS */
-    public function getAllUsers()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM users ORDER BY id DESC");
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /* UPDATE USER */
-    public function updateUser($id, $name, $email, $age)
-    {
-        $sql = "UPDATE users 
-                SET name = :name, email = :email, age = :age 
-                WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ":id"    => $id,
-            ":name"  => $name,
-            ":email" => $email,
-            ":age"   => $age
-        ]);
-    }
-
-    /* DELETE USER */
-    public function deleteUser($id)
-    {
-        $sql = "DELETE FROM users WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([":id" => $id]);
+    public function getRoles() {
+        return $this->db->query("SELECT * FROM roles")->fetchAll();
     }
 }
