@@ -1,5 +1,5 @@
-<?php
-
+ <?php
+/*
 class Validator
 {
     public $errors = [];
@@ -48,3 +48,4 @@ class Validator
         return $this->errors;
     }
 }
+*/

@@ -1,75 +1,72 @@
 <?php
+require_once __DIR__ . '/../core/Database.php';
 
-class User
-{
-    private $db;
+class User {
+    public $db;
 
-    public function __construct()
-    {
-        // Use the singleton
-        $this->db = Database::getInstance()->getConnection();
+    public function __construct() {
+        // إنشاء اتصال بقاعدة البيانات داخل الـ Model
+        $this->db = (new Database())->connect(); 
     }
 
+    // التحقق من وجود البريد مسبقًا
+    public function emailExists($email) {
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->rowCount() > 0;
+    }
 
-    /* CREATE USER */
-    public function createUser($name, $email, $age)
-    {
-        $sql = "INSERT INTO users (name, email, age) 
-                VALUES (:name, :email, :age)";
+    // إنشاء مستخدم جديد مع تشفير كلمة المرور
+    public function create($data) {
+        if ($this->emailExists($data['email'])) {
+            return false;
+        }
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->db->prepare("
+            INSERT INTO users 
+            (role, name, email, password, national_id, city, phone, created_at, status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 'active')
+        ");
 
-        return $stmt->execute([
-            ":name"  => $name,
-            ":email" => $email,
-            ":age"   => $age
+        $success = $stmt->execute([
+            $data['role'],
+            $data['name'],
+            $data['email'],
+            password_hash($data['password'], PASSWORD_DEFAULT),
+            $data['national_id'],
+            $data['city'],
+            $data['phone']
         ]);
+
+        if(!$success){
+            print_r($stmt->errorInfo());
+        }
+
+        return $success;
     }
 
-    /* GET ONE USER */
-    public function getUserById($id)
-    {
-        $sql = "SELECT * FROM users WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([":id" => $id]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    /* GET ALL USERS */
-    public function getAllUsers()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM users ORDER BY id DESC");
-        $stmt->execute();
-
+    // الحصول على جميع المستخدمين
+    public function getAll() {
+        $stmt = $this->db->query("SELECT * FROM users");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /* UPDATE USER */
-    public function updateUser($id, $name, $email, $age)
-    {
-        $sql = "UPDATE users 
-                SET name = :name, email = :email, age = :age 
-                WHERE id = :id";
+    // عد المستخدمين حسب الحالة
+    public function countByStatus($status = null) {
+        if ($status !== null) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as cnt FROM users WHERE status = ?");
+            $stmt->execute([$status]);
+        } else {
+            $stmt = $this->db->query("SELECT COUNT(*) as cnt FROM users"); 
+        }
 
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([
-            ":id"    => $id,
-            ":name"  => $name,
-            ":email" => $email,
-            ":age"   => $age
-        ]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['cnt'] ?? 0;
     }
 
-    /* DELETE USER */
-    public function deleteUser($id)
-    {
-        $sql = "DELETE FROM users WHERE id = :id";
-
-        $stmt = $this->db->prepare($sql);
-
-        return $stmt->execute([":id" => $id]);
+    // تحديث حالة المستخدم (active, inactive, removed, etc.)
+    public function updateStatus($id, $status) {
+        $stmt = $this->db->prepare("UPDATE users SET status = ? WHERE id = ?");
+        return $stmt->execute([$status, $id]);
     }
 }
