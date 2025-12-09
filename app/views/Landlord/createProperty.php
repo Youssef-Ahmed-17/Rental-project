@@ -5,15 +5,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title> Add new property</title>
          <style>
- body {
+  body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f4f4f4;
     }
+     .back-icon {
+    display: inline-block;
+    margin: 15px 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000ff;
+    transition: 0.2s;
+}
+
+.back-icon:hover {
+    color: #1b4d97;
+    transform: translateX(-4px);
+}
 
     /* FIXED HEADER */
     .top-header {
-      position: fixed;
       top: 0;
       left: 0;
       right: 0;
@@ -23,7 +36,7 @@
       font-weight: bold;
       border-bottom: 1px solid #ddd;
     }
-.section {
+ .section {
     border: 1px solid #e6e6e6;
     border-radius: 10px;
     padding: 50px;
@@ -102,7 +115,7 @@ textarea {
       </style>
     </head>
         <body> 
-            <button class="arrow-back">⬅</button>
+          <a href="dashboard.php" class="back-icon">⬅</a>
             <div class="top-header"> 
                 <h3>Add New Property</h3>
             </div>
@@ -154,3 +167,4 @@ textarea {
        <button class="btn cancel-btn">Cancel</button>
           </div>
         </body>
+      </html>

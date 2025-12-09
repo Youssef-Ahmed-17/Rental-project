@@ -1,33 +1,44 @@
 <?php
-require_once _DIR_.'/../core/Database.php';
+require_once __DIR__ . '/../core/Database.php';
 
 class User {
     private $db;
 
     public function __construct() {
-        $this->db = new Database();
+        $this->db = (new Database())->connect();
+    }
+
+    public function emailExists($email) {
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->rowCount() > 0;
     }
 
     public function create($data) {
-        $stmt = $this->db->prepare("INSERT INTO users (name, email, password, phone, city, national_id, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([
+        if ($this->emailExists($data['email'])) {
+            return false;
+        }
+
+        $stmt = $this->db->prepare("
+            INSERT INTO users 
+            (role, name, email, password, national_id, city, phone, created_at, status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 'active')
+        ");
+
+        $success = $stmt->execute([
+            $data['role'],
             $data['name'],
             $data['email'],
             password_hash($data['password'], PASSWORD_DEFAULT),
-            $data['phone'],
-            $data['city'],
             $data['national_id'],
-            $data['role_id']
+            $data['city'],
+            $data['phone']
         ]);
-    }
 
-    public function findByEmail($email) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        return $stmt->fetch();
-    }
+        if(!$success){
+            print_r($stmt->errorInfo());
+        }
 
-    public function getRoles() {
-        return $this->db->query("SELECT * FROM roles")->fetchAll();
+        return $success;
     }
 }

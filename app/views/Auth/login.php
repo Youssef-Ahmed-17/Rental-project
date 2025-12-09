@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        * {
+ * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -93,31 +93,38 @@ input:focus {
 .login-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(80,0,255,0.4);
-}
-
+} 
 .tabs {
-    margin: 15px 0;
-    display: flex;
-    justify-content: space-between;
-}
+            display: flex;
+            margin: 15px 0;
+            background: #eaeaea;
+            padding: 5px;
+            border-radius: 40px;
+        }
 
-.tab {
-    width: 48%;
-    padding: 10px;
-    background: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: 500;
-}
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            background: transparent;
+            border-radius: 40px;
+            cursor: pointer;
+        }
 
-.tab.active {
-    background: #3c00ff;
-    color: white;
-    transform: scale(1.05);
+        .tab.active {
+            background: #3c00ff;
+            color: white;
+            transform: scale(1.05);
+        }
+        .tab:hover {
+             background: #e0d4ff;
+             border-radius: 40px;
+             cursor: pointer;
 }
-
 .forgot {
     display: block;
     margin-top: 8px;
@@ -138,10 +145,11 @@ input:focus {
             <p class="desc">Sign in to your account or create a new one</p>
 
             <div class="tabs">
-                <button class="tab active">Login</button>
-                <button class="tab">Register</button>
-            </div>
-
+             <button class="tab active">Login</button>
+              <a class="tab" href="register.php">Register</a>
+         </div>
+   
+            
             <label>Email</label>
             <input type="email" placeholder="Enter your email">
 
@@ -151,6 +159,8 @@ input:focus {
             <a href="#" class="forgot">Forgot your password?</a>
 
             <button class="login-btn">Login</button>
+            
+
         </div>
     </div>
 </body>

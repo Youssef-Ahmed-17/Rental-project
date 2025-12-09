@@ -17,28 +17,32 @@
     padding-bottom: 20px;
 }
 .dashboard {
-    display: flex; 
+    display: flex;
     gap: 40px;
     margin: 20px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    align-items: stretch;   /* يجعل كل الكروت نفس الارتفاع */
 }
+
 .column {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;  /* يخليهم صف مش عمود */
     gap: 25px;
     width: 100%;
 }
 
 .card {
     background: rgb(240, 248, 255);
-    width: 330px;
+    width: 420px;
     padding: 25px;
     border-radius: 15px;
     display: flex;
     align-items: center;
     gap: 20px;
     box-shadow: 0 3px 12px rgba(0,0,0,0.1);   
+    height: 120px;  /* توحيد الارتفاع */
 }
+
 
 .icon {
     width: 70px;
@@ -69,20 +73,21 @@
     padding-left: 20px;
 }
 .btn {
-    width: 350px;
-    padding: 12px;
-    border-radius: 10px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: .2s;
-    width: 90%;
+    flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
 }
 
 .add-btn { background: #418beb;}
 .view-btn{ background: #2361be; }
+.list-btn { background: #0d2a74; }
+.edit-btn { background: #09173dff; }
 
 .btn:hover {
     filter: brightness(0.85);
@@ -151,49 +156,31 @@
         <div class="card">
             <div class="icon acc">🏠</div>
             <div>
-                <p class="title">Rented</p>
+                <p class="title">Rented properties</p>
                 <p class="number">0</p>
             </div>
         </div>
 
     </div>
-
 
     <div class="column">
 
         <div class="card">
             <div class="icon req">📄</div>
             <div>
-                <p class="title">Proposals</p>
+                <p class="title"> pending Proposals</p>
                 <p class="number">3</p>
             </div>
         </div>
 
-        <div class="card">
-            <div class="icon post">💲</div>
-            <div>
-                <p class="title">Monthly Revnue</p>
-                <p class="number">$0</p>
-            </div>
-        </div>
-
     </div>
-    <div class="column">
-
-        <div class="card">
-            <div class="icon Inpost">📦</div>
-            <div>
-                <p class="title">Available</p>
-                <p class="number">0</p>
-            </div>
-        </div>
-
-    </div>
-
+    
 </div>
 <div class="buttons-row">
-    <button class="btn add-btn"> + Add New Property</button>
-    <button class="btn view-btn">View Proposals</button>
+  <a class="btn add-btn" href="createProperty.php">+ Add New Property</a>
+  <a class="btn view-btn" href="proposals.php">View Proposals</a>
+  <a class="btn list-btn" href="list.php">≡ List my properties</a>
+  <a class="btn edit-btn" href="edit.php">edit property</a>
 </div>
 <section class="my-properties">
         <h3 style="color: rgb(51, 58, 84) ;">My Properties</h3>
@@ -206,9 +193,8 @@
 
 </div>
 <nav class="bottom-nav">
-    <a href="#" class="nav-item "> 🔍Dashboard</a>
-    <a href="#" class="nav-item">🔔 Notfications</a>
     <a href="#" class="nav-item"> 🏠 home</a>
+    <a href="landlordNotifications.php" class="nav-item">🔔 Notfications</a>
 </nav>
 </body>
 </html>

@@ -12,6 +12,15 @@
     font-size: 40px;
     font-weight: 350px;
 }
+.back-icon {
+    display: inline-block;
+    margin: 15px 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000;
+    transition: 0.2s;
+}
 .dashboard {
     display: flex; 
     gap: 40px;
@@ -151,6 +160,7 @@
 }
 </style>
 <body>
+    <a href="adminDashboard.php" class="back-icon">⬅</a>
     <h1 class="header">All Users</h1>
 <div class="dashboard">
     <div class="column">

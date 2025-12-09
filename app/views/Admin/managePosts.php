@@ -12,6 +12,15 @@
     font-size: 50px;
     font-weight: 400px;
 }
+.back-icon {
+    display: inline-block;
+    margin: 15px 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000;
+    transition: 0.2s;
+}
 .dashboard {
     display: flex; 
     gap: 40px;
@@ -24,7 +33,6 @@
     gap: 25px;
     width: 100%;
 }
-
 .card-head{
     background: rgb(240, 248, 255);
     width: 380px;
@@ -35,7 +43,6 @@
     gap: 20px;
     box-shadow: 0 3px 12px rgba(0,0,0,0.1);   
 }
-
 .icon {
     width: 70px;
     height: 70px;
@@ -58,50 +65,34 @@
     border: rgb(187, 185, 185) 1px solid ;
     border-radius: 10px ;
     margin: 20px;
-
   }
-  
   .card:hover{
   transform: scale(1.05);
   transition: transform 0.2s;
   }
-  
   .row {
    margin-top: 100px;
    display: flex;
    justify-content: space-around;
-
   }
-
  img {
-
   width: 400px ;
   height: 200px ;
   border-radius: 10px 10px 0px 0px ;
-
  }
-
-
  .description{
     display: flex;
     justify-content: space-around;
-    margin: 0px ;
-   
+    margin: 0px ; 
   }
-
-
   .description2{
-  
     padding-left: 20px;
     color: grey;
   }  
-
   .price{
     color: rgb(64, 64, 207);
   }
-
 .taskbar{
- 
    width: 100%;
    height: 50px;
    background: rgb(245, 243, 243); 
@@ -115,6 +106,7 @@
   }
     </style>
     <body>
+        <a href="adminDashboard.php" class="back-icon">⬅</a>
         <h1 class="header">Total Posts</h1>
 <div class="dashboard">
     <div class="column">
@@ -153,12 +145,8 @@
     border-radius:6px;">
     Reset Status
 </button>
-<!-- 1st row -->
-
 <div class="row">
-
 <div class="card">
-
    <image  class="img"  src = "pic_1.jpg" > 
      <div class="description"> 
       <p> Modern Downtown Appartment </p>
@@ -183,12 +171,8 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
-
 <div class="card">
-
    <image  class="img"  src = "pic_2.jpg" > 
      <div class="description"> 
       <p> Luxury Villa with Pool </p>
@@ -213,11 +197,8 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
 <div class="card">
-
    <image  class="img"  src = "pic_3.jpg" > 
      <div class="description"> 
       <p> Cozy Studio in Brooklyn </p>
@@ -242,14 +223,10 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
 </div>
 <div class="row">
-
 <div class="card">
-
    <image  class="img"  src = "pic_4.jpg" > 
      <div class="description"> 
       <p> Penthouse with City Views </p>
@@ -274,12 +251,8 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
-
 <div class="card">
-
    <image  class="img"  src = "pic_5.jpg" > 
      <div class="description"> 
       <p> Suburban Family Home </p>
@@ -304,9 +277,7 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
 <div class="card">
 
    <image  class="img"  src = "pic_6.jpg" > 
@@ -333,20 +304,15 @@
     border-color: black;
     box-shadow:  0 3px 12px rgba(0,0,0,0.1) ;">Hide✘</button>
      </div>
-
 </div>
-
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
-
     cards.forEach((card, index) => {
         const approveBtn = card.querySelector("button:nth-of-type(1)");
         const hideBtn = card.querySelector("button:nth-of-type(2)");
         const cardKey = "post_" + index;
-
-        // استرجاع الحالة من localStorage
         const saved = localStorage.getItem(cardKey);
         if (saved === "Approved") {
             if (approveBtn) {
@@ -357,8 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (saved === "Hidden") {
             card.style.display = "none";
         }
-
-        // زر الموافقة
         if (approveBtn) {
             approveBtn.addEventListener("click", () => {
                 approveBtn.textContent = "Approved ✔";
@@ -368,8 +332,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.setItem(cardKey, "Approved");
             });
         }
-
-        // زر الإخفاء
         if (hideBtn) {
             hideBtn.addEventListener("click", () => {
                 card.style.display = "none";

@@ -1,40 +1,44 @@
 <?php
-// app/controllers/AuthController.php
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../core/Controller.php';
+
 class AuthController extends Controller {
-    private $userModel;
-    private $roleModel;
-    public function __construct(){
-        $this->userModel = new User($this->db);
-        $this->roleModel = new Role($this->db);
+
+    public function register() {
+        $this->view('<auth/register');
     }
 
-    public function login(){
-        if($_POST){
-            $user = $this->userModel->findByEmail($_POST['email']);
-            if($user && password_verify($_POST['password'], $user['password'])){
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['role_id'] = $user['role_id'];
-                header("Location: /dashboard"); exit;
-            } else { echo "Invalid credentials"; }
+    public function login() {
+        $this->view('auth/login'); 
         }
-        $this->view('auth/login');
+
+
+    public function store() {
+    $user = new User();
+
+    if ($user->emailExists($_POST['email'])) {
+        header("Location: /Rental_project/public/AuthController/register?error=Email already exists");
+        exit();
     }
 
-    public function register(){
-        if($_POST){
-            $data = [
-                'full_name'=>$_POST['full_name'],
-                'email'=>$_POST['email'],
-                'password'=>password_hash($_POST['password'],PASSWORD_DEFAULT),
-                'role_id'=>$_POST['role_id'],
-                'phone'=>$_POST['phone'],
-                'city'=>$_POST['city'],
-                'national_id'=>$_POST['national_id']
-            ];
-            $this->userModel->create($data);
-            header("Location: /login"); exit;
-        }
-        $roles = $this->roleModel->all();
-        $this->view('auth/register', ['roles'=>$roles]);
+    $created = $user->create([
+        "role" => $_POST['role'],
+        "name" => $_POST['name'],
+        "email" => $_POST['email'],
+        "password" => $_POST['password'],
+        "national_id" => $_POST['national_id'],
+        "city" => $_POST['city'],
+        "phone" => $_POST['phone']
+    ]);
+
+    if($created){
+        // Redirect to login page after successful registration
+        header("Location: /Rental_project/public/AuthController/login");
+        exit();
+    } else {
+        header("Location: /Rental_project/public/AuthController/register?error=Failed to create user");
+        exit();
     }
+}
+
 }

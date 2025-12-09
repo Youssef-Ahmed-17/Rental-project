@@ -73,16 +73,15 @@
 }
 
 .btn {
-    width: 350px;
-    padding: 12px;
-    border-radius: 10px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: .2s;
-    width: 90%;
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
 }
 
 .accept-btn { background: #418beb;}
@@ -164,9 +163,9 @@
 
 </div>
 <div class="buttons-row">
-    <button class="btn accept-btn">👤 Accept/Reject Landlord Requests</button>
-    <button class="btn post-btn">🧩 Manage Posts (Accept / Reject)</button>
-    <button class="btn list-btn">≡ List Users</button>
+    <a class="btn accept-btn" href="landlordRequests.php">👤 Accept/Reject Landlord Requests</a>
+    <a class="btn post-btn" href="managePosts.php">🧩 Manage Posts (Accept / Reject)</a>
+    <a class="btn list-btn" href="listUsers.php">≡ List Users</a>
 </div>
 </body>
 </html>

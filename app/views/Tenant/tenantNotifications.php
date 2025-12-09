@@ -6,7 +6,21 @@
     <title>Tenant Notifications</title>
 
     <style>  
-        body { font-family: Arial, sans-serif; background: #f5f7fb;padding: 20px; margin: 50px; }
+       body { font-family: Arial, sans-serif; background: #f5f7fb;padding: 20px; margin: 50px; }
+         .back-icon {
+         display: inline-block;
+         margin: 15px 20px;
+         font-size: 26px;
+         font-weight: bold;
+         text-decoration: none;
+        color: #000000ff;
+        transition: 0.2s;
+}
+
+           .back-icon:hover {
+           color: #1b4d97;
+            transform: translateX(-4px);
+            }
 
         h2 { margin-bottom: 20px;font-size: 24px; }
         .notification-card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 15px;
@@ -30,14 +44,15 @@
 
 </head>
 <body>
-
+    <a href="tenantWall.php" class="back-icon">⬅ Back to dashboard</a>
     <h2>🔔Notifications</h2>
 
     <div class="notification-card">
         <div class="icon">💬</div>
         <div class="info">
             <h3>New Message</h3>
-            <p>You have no messages .</p>
+            <p>You have new messages .</p>
+            <p> Mahmoud Abdelrazik sent a message : The property you asked for will be available from 20/12/2025</p>
         </div>
     </div>
 
@@ -45,7 +60,7 @@
         <div class="icon">📄</div>
         <div class="info">
             <h3>Your Request</h3>
-            <p>No request has been added.</p>
+            <p>Your request has been sent.</p>
         </div>
     </div>
 

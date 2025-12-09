@@ -12,6 +12,19 @@
     font-size: 50px;
     font-weight: 400px;
 }
+.back-icon {
+    display: inline-block;
+    margin: 15px 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000;
+    transition: 0.2s;
+}
+.back-icon:hover {
+    color: #1b4d97;
+    transform: translateX(-4px);
+}
 .dashboard {
     display: flex; 
     gap: 40px;
@@ -145,6 +158,7 @@
 }
  </style>
     <body>
+        <a href="adminDashboard.php" class="back-icon">⬅</a>
         <h1 class="header">Total Requests</h1>
 <div class="dashboard">
     <div class="column">
@@ -359,8 +373,6 @@ function loadStatus(row, rowId) {
         removeButtons(row);
     }
 }
-
-// دالة تشيل الزرارين
 function removeButtons(row){
     const acceptBtn = row.querySelector(".accept");
     const rejectBtn = row.querySelector(".reject");

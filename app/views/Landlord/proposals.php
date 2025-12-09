@@ -1,17 +1,48 @@
+<?php
+// معالجة رفع الملفات
+if(isset($_FILES['document'])){
+    $controller->uploadDocument($_POST['application_id'], $_FILES['document']);
+    header("Location: tenant_applications.php");
+    exit;
+}
+
+// معالجة تغيير الحالة
+if(isset($_POST['status_change'])){
+    $controller->changeStatus($_POST['application_id'], $_POST['status']);
+    header("Location: tenant_applications.php");
+    exit;
+}
+
+$applications = $controller->getApplications();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tenant Applications</title>
-    <style>
-        body {
+<meta charset="UTF-8">
+<title>Tenant Applications</title>
+<style>
+body {
     font-family: Arial, sans-serif;
     background: #f4f6f9;
     margin: 0;
     padding: 20px;
 } 
+.back-icon {
+    display: inline-block;
+    margin: 15px 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000ff;
+    transition: 0.2s;
+}
+
+.back-icon:hover {
+    color: #1b4d97;
+    transform: translateX(-4px);
+}
+
 .top-header {
-      position: fixed;
       top: 0;
       left: 0;
       right: 0;
@@ -135,88 +166,71 @@
     color: white;
     cursor: pointer;
 }
-    </style>
+</style>
 </head>
 <body>
-<div class="top-header"> 
-                <h3>Tenant propsales</h3>
-            </div>
+<a href="dashboard.php" class="back-icon">⬅</a>
+<div class="top-header"><h3>Tenant Applications</h3></div>
 <div class="tabs">
-    <button class="active"> Under review <span> 2</span></button>
-    <button>Accepted <span>6</span></button>
-    <button>Rejected <span>5</span></button>
+    <button class="active">Pending</button>
+    <button>Accepted</button>
+    <button>Rejected</button>
 </div>
 
-<div class="application-card">
-    <div class="header">
-        <h2>Modern Downtown Apartment</h2>
-        <span class="status pending">Pending</span>
-    </div>
+<?php foreach($applications as $app): ?>
+    <?php $docs = $controllers->getDocuments($app['id']); ?>
+    <div class="application-card">
+        <div class="header">
+            <h2><?php echo htmlspecialchars($app['property_name']); ?></h2>
+            <span class="status <?php echo strtolower($app['status']); ?>"><?php echo ucfirst($app['status']); ?></span>
+        </div>
+        <p>Submitted on: <?php echo $app['submited_at']; ?></p>
 
-    <p class="submitted-date">Submitted on: 2025-11-12</p>
+        <h3>Tenant Information</h3>
+        <div class="tenant-info">
+            <div class="emoji">👤</div>
+            <div>
+                <h4><?php echo htmlspecialchars($app['tenant_name']); ?></h4>
+                <p><?php echo htmlspecialchars($app['tenant_address']); ?></p>
+                <p>Email: <?php echo htmlspecialchars($app['tenant_email']); ?></p>
+                <p>Phone: <?php echo htmlspecialchars($app['tenant_phone']); ?></p>
+            </div>
+        </div>
 
-    <h3>Tenant Information</h3>
-    <div class="tenant-info">
-        <div class="emoji">👤</div>
-        <div>
-            <h4>tasneem elbraady</h4>
-            <p>mnya elkameh</p>
-            <p>Email: tasnem@gmial.com</p>
-            <p>Phone: 01023456789</p>
+        <h3>Submitted Documents</h3>
+        <ul class="doc-list">
+            <?php foreach($docs as $doc): ?>
+                <li>
+                    <?php echo htmlspecialchars($doc['file_name']); ?> 
+                    <a href="<?php echo htmlspecialchars($doc['file_path']); ?>" target="_blank" class="download">⬇</a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
+        <form class="upload-form" action="" method="POST" enctype="multipart/form-data">
+            <input type="file" name="document" required>
+            <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
+            <button type="submit">Upload Document</button>
+        </form>
+
+        <h3>Additional Note</h3>
+        <p class="note"><?php echo htmlspecialchars($app['note']); ?></p>
+
+        <div class="actions">
+            <form action="" method="POST" style="display:inline-block;">
+                <input type="hidden" name="status_change" value="1">
+                <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
+                <input type="hidden" name="status" value="rejected">
+                <button class="reject">Reject</button>
+            </form>
+            <form action="" method="POST" style="display:inline-block;">
+                <input type="hidden" name="status_change" value="1">
+                <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
+                <input type="hidden" name="status" value="accepted">
+                <button class="accept">Accept</button>
+            </form>
         </div>
     </div>
-
-    <h3>Submitted Documents</h3>
-    <ul class="doc-list">
-        <li>ID Document <span class="download">⬇</span></li>
-        <!-- <li>Proof of Income <span class="download">⬇</span></li>
-        <li>Reference Letter <span class="download">⬇</span></li> -->
-    </ul>
-    <h3>Additional Note</h3>
-    <p class="note">
-        I have been working at a fintech company for 4 years. I have stable income
-        and excellent references. Looking for a long-term rental.
-    </p>
-    <div class="actions">
-        <button class="reject">Reject</button>
-        <button class="accept">Accept</button>
-    </div>
-</div>
-
-<div class="application-card">
-    <div class="header">
-        <h2>City View Apartment</h2>
-        <span class="status pending">Pending</span>
-    </div>
-    <p class="submitted-date">Submitted on: 2025-6-29</p>
-    <h3>Tenant Information</h3>
-    <div class="tenant-info">
-        <div class="emoji">👤</div>
-        <div>
-            <h4>elsayed elbadawy</h4>
-            <p>tanta</p>
-            <p>Email: elbadawy@gmail.com</p>
-            <p>Phone: 01011166542</p>
-        </div>
-    </div>
-
-    <h3>Submitted Documents</h3>
-    <ul class="doc-list">
-        <li>ID Document <span class="download">⬇</span></li>
-        <!-- <li>Employment Letter <span class="download">⬇</span></li>
-        <li>Bank Statements <span class="download">⬇</span></li> -->
-    </ul>
-
-    <h3>Additional Note</h3>
-    <p class="note">
-        I recently relocated for a new job position. I am looking for a quiet apartment
-        and can move in immediately.
-    </p>
-    <div class="actions">
-        <button class="reject">Reject</button>
-        <button class="accept">Accept</button>
-    </div>
-</div>
-
+<?php endforeach; ?>
 </body>
 </html>

@@ -71,19 +71,22 @@
     color: rgb(64, 64, 207);
   }
 
-.taskbar{
- 
-   width: 100%;
-   height: 50px;
-   background: rgb(245, 243, 243); 
-   position: fixed;
-   bottom: 0 ;
-   left: 0;
-   z-index: 1000;
-   display: flex;
-   justify-content: space-around
-   ;
-  }
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    border-top: 1px solid #ddd;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #080808;
+    font-size: 14px;
+}
 
  </style>
 
@@ -106,7 +109,7 @@
      </div>
      <div class="description2"> 
    <p class="Location"> ⚲ New York  </p>
-   <p> 🛏️ 2    🛁 2   ◻ 1200 sqft </p>
+   <p> 🛏 2    🛁 2   ◻ 1200 sqft </p>
    <p> 👁 245 views </p>
      </div>
 
@@ -122,7 +125,7 @@
      </div>
      <div class="description2"> 
    <p class="Location"> ⚲ Los Angelos  </p>
-   <p> 🛏️ 4    🛁 3   ◻ 3200 sqft </p>
+   <p> 🛏 4    🛁 3   ◻ 3200 sqft </p>
    <p> 👁 389 views </p>
      </div>
 
@@ -137,7 +140,7 @@
      </div>
      <div class="description2"> 
    <p class="Location"> ⚲ New York  </p>
-   <p> 🛏️ 1    🛁 1   ◻ 500 sqft </p>
+   <p> 🛏 1    🛁 1   ◻ 500 sqft </p>
    <p> 👁156 views </p>
      </div>
 
@@ -145,15 +148,11 @@
 
 </div>
 
-<div class="taskbar">
-
-<div> <p> 🏠︎ Home </p> </div>
-
-<div> <p> ⛉ Saved </p> </div>
-
-<div> <p> 🕭 Notifications </p> </div>
-
-</div>
+<nav class="bottom-nav">
+    <a href="tenantWall.php" class="nav-item "> 🏠 Home</a>
+    <a href="" class="nav-item">⛉ Saved</a>
+    <a href="tenantNotifications.php" class="nav-item">🕭 Notifications</a>
+</nav>
 
 
 
