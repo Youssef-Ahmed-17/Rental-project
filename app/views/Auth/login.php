@@ -150,15 +150,25 @@ input:focus {
          </div>
    
             
-            <label>Email</label>
-            <input type="email" placeholder="Enter your email">
+       <form method="POST" action="?url=AuthController/login">
 
-            <label>Password</label>
-            <input type="password" placeholder="Enter your password">
+    <?php if(!empty($error)): ?>
+        <div style="color:red; margin-bottom:10px;">
+            <?= $error ?>
+        </div>
+    <?php endif; ?>
 
-            <a href="#" class="forgot">Forgot your password?</a>
+    <label>Email</label>
+    <input type="email" name="email" placeholder="Enter your email" required>
 
-            <button class="login-btn">Login</button>
+    <label>Password</label>
+    <input type="password" name="password" placeholder="Enter your password" required>
+
+    <a href="#" class="forgot">Forgot your password?</a>
+
+    <button type="submit" class="login-btn">Login</button>
+</form>
+
             
 
         </div>

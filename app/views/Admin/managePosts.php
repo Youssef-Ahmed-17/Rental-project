@@ -8,7 +8,7 @@
     <style>
 .header{
     text-align: center;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Cambria , Cochin , Georgia, Times, 'Times New Roman', serif;
     font-size: 50px;
     font-weight: 400px;
 }

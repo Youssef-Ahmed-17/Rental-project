@@ -60,28 +60,26 @@
     font-size: 20px;
     font-weight: bold;
     color: black;
-}
-
-
-.buttons-row {
+}.buttons-row {
     margin-top: 35px;
     display: flex;
     gap: 30px;
     justify-content: flex-start;
     padding-left: 20px;
- 
+
 }
 
 .btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
+    width: 350px;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: .2s;
+    width: 90%;
 }
 
 .accept-btn { background: #418beb;}
@@ -89,25 +87,28 @@
 .list-btn{ background: #2361be; }
 
 .btn:hover {
-    filter: brightness(0.85);
-}
-
+    filter: brightness(0.85);}
 </style>
 </head>
-<body>
-    <div class="fcard">
-    <h1>Admin Dashboard</h1>
-       <h5 style=" margin-left: 30px;">Welcome back,adminUserName</h5>
-        </div>
-        
-<div class="dashboard">
-    <div class="column">
 
-        <div class="card">
+<body>
+
+    <!-- Admin Header -->
+    <div class="fcard">
+        <h1>Admin Dashboard</h1>
+        <h5 style=" margin-left: 30px;">Welcome back, <?= $_SESSION['user']['name'] ?></h5>
+    </div>
+
+
+<!-- MAIN CARDS -->
+<div class="dashboard">
+
+    <div class="column">
+       <div class="card">
             <div class="icon req">👤</div>
             <div>
                 <p class="title">Landlord Requests</p>
-                <p class="number">0</p>
+                <p class="number"><?= $landlordReq ?></p>
             </div>
         </div>
 
@@ -115,20 +116,17 @@
             <div class="icon acc">✔</div>
             <div>
                 <p class="title">Accepted Posts</p>
-                <p class="number">0</p>
+                <p class="number"><?= $approvedPosts ?></p>
             </div>
         </div>
+  </div>
 
-    </div>
-
-
-    <div class="column">
-
+   <div class="column">
         <div class="card">
             <div class="icon req">👥</div>
             <div>
                 <p class="title">Registered Users</p>
-                <p class="number">1</p>
+                <p class="number"><?= $registeredUsers ?></p>
             </div>
         </div>
 
@@ -136,36 +134,36 @@
             <div class="icon post">💬</div>
             <div>
                 <p class="title">Total Posts</p>
-                <p class="number">0</p>
+                <p class="number"><?= $totalPosts ?></p>
             </div>
         </div>
+   </div>
 
-    </div>
     <div class="column">
-
-        <div class="card">
+       <div class="card">
             <div class="icon Inpost">❌</div>
             <div>
                 <p class="title">Inactive Posts</p>
-                <p class="number">0</p>
+                <p class="number"><?= $inactivePosts ?></p>
             </div>
         </div>
 
         <div class="card">
             <div class="icon rev">🗑</div>
             <div>
-                <p class="title">Remove Posts</p>
-                <p class="number">0</p>
+                <p class="title">Removed Posts</p>
+                <p class="number"><?= $removedPosts ?></p>
             </div>
-        </div>
-
+                </div>
     </div>
 
 </div>
+
 <div class="buttons-row">
-    <a class="btn accept-btn" href="landlordRequests.php">👤 Accept/Reject Landlord Requests</a>
-    <a class="btn post-btn" href="managePosts.php">🧩 Manage Posts (Accept / Reject)</a>
-    <a class="btn list-btn" href="listUsers.php">≡ List Users</a>
+    <a class="btn accept-btn" href="index.php?action=requests">👤 Accept/Reject Landlord Requests</a>
+    <a class="btn post-btn" href="index.php?action=managePosts">🧩 Manage Posts (Accept / Reject)</a>
+    <a class="btn list-btn" href="index.php?action=listUsers">≡ List Users</a>
 </div>
+
 </body>
 </html>

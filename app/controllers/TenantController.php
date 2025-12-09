@@ -1,9 +1,16 @@
+<?php
+
+require_once __DIR__ . '/../core/Controller.php';
+
+
 class TenantController extends Controller {
+
     private $propertyModel, $savedModel, $applicationModel;
-    public function __construct(){
-        $this->propertyModel = new Property($this->db);
-        $this->savedModel = new SavedProperty($this->db);
-        $this->applicationModel = new Application($this->db);
+
+    public function __construct() {
+        $this->propertyModel = new Property();
+        $this->savedModel = new SavedProperty();
+        $this->applicationModel = new Application();
     }
 
     public function dashboard(){
@@ -18,7 +25,7 @@ class TenantController extends Controller {
 
     public function propertyDetail($id){
         $property = $this->propertyModel->find($id);
-        $images = (new PropertyImage($this->db))->findByProperty($id);
+        $images = (new PropertyImage())->findByProperty($id);
         $this->view('tenant/property-detail', ['property'=>$property,'images'=>$images]);
     }
 
@@ -29,8 +36,12 @@ class TenantController extends Controller {
                 'tenant_id'=>$_SESSION['user_id'],
                 'note'=>$_POST['note'] ?? ''
             ]);
-            header("Location: /tenant/dashboard"); exit;
+
+            header("Location: ?url=TenantController/dashboard");
+            exit;
         }
+
         $property = $this->propertyModel->find($id);
         $this->view('tenant/apply-property', ['property'=>$property]);
-    } }
+    }
+}
