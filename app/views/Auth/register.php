@@ -46,6 +46,7 @@
             border-radius: 20px;
             backdrop-filter: blur(12px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
         }
 
         .tabs {
@@ -74,11 +75,12 @@
             color: white;
             transform: scale(1.05);
         }
+        
         .tab:hover {
              background: #e0d4ff;
              border-radius: 40px;
              cursor: pointer;
-}
+        }
 
         .register-as {
             margin: 15px 0 5px;
@@ -130,6 +132,15 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -141,15 +152,17 @@
     <div class="card">
         <h2>Welcome</h2>
         <p>Sign in to your account or create a new one</p>
-       <?php if (isset($_GET['error'])): ?>
+        
+        <?php if (isset($_GET['error'])): ?>
             <div class="error">
                 <?= htmlspecialchars($_GET['error']) ?>
             </div>
         <?php endif; ?>
+        
         <!-- TABS -->
         <div class="tabs">
-            <a href="/Rental_project/public/AuthController/login" class="tab">Login</a>
-            <a href="register.php" class="tab active">Register</a>
+            <a href="?url=AuthController/login" class="tab">Login</a>
+            <a href="?url=AuthController/register" class="tab active">Register</a>
         </div>
         
         <p class="register-as">Register as</p>
@@ -161,23 +174,23 @@
         </div>
 
         <!-- FORM -->
-    <form action="/Rental_project/public/AuthController/store" method="POST">
+        <form action="?url=AuthController/store" method="POST">
 
-    <input type="hidden" name="role" id="roleInput" value="tenant">
-    <input type="text" name="name" placeholder="Enter your full name" required>
-    <input type="email" name="email" placeholder="Enter your email" required>
-    <input type="password" name="password" placeholder="Create a password" required>
+            <input type="hidden" name="role" id="roleInput" value="tenant">
+            <input type="text" name="name" placeholder="Enter your full name" required>
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <input type="password" name="password" placeholder="Create a password" required>
 
-    <div class="row">
-        <input type="text" name="city" placeholder="City" required>
-        <input type="text" name="phone" placeholder="Phone" required>
-    </div>
+            <div class="row">
+                <input type="text" name="city" placeholder="City" required>
+                <input type="text" name="phone" placeholder="Phone" required>
+            </div>
 
-    <input type="text" name="national_id" placeholder="Enter your national ID" required>
+            <input type="text" name="national_id" placeholder="Enter your national ID" required>
 
-    <button type="submit" class="createbutton">Create Account</button>
+            <button type="submit" class="createbutton">Create Account</button>
 
-</form>
+        </form>
 
     </div>
 
@@ -198,36 +211,6 @@
             tenantBtn.classList.remove('active');
             roleInput.value = 'landlord';
         });
-        // validate.js
-
-function validateForm(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll("input[required]");
-    let valid = true;
-
-    inputs.forEach(input => {
-        if (input.value.trim() === "") {
-            input.style.border = "1px solid red";
-            valid = false;
-        } else {
-            input.style.border = "1px solid #ccc";
-        }
-    });
-
-    return valid;
-}
-// ajax.js
-
-async function sendRequest(url, data = {}) {
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    return response.json();
-}
-
     </script>
 
 </body>

@@ -1,236 +1,363 @@
-<?php
-// معالجة رفع الملفات
-if(isset($_FILES['document'])){
-    $controller->uploadDocument($_POST['application_id'], $_FILES['document']);
-    header("Location: tenant_applications.php");
-    exit;
-}
-
-// معالجة تغيير الحالة
-if(isset($_POST['status_change'])){
-    $controller->changeStatus($_POST['application_id'], $_POST['status']);
-    header("Location: tenant_applications.php");
-    exit;
-}
-
-$applications = $controller->getApplications();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Tenant Applications</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    margin: 0;
-    padding: 20px;
-} 
-.back-icon {
-    display: inline-block;
-    margin: 15px 20px;
-    font-size: 26px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #000000ff;
-    transition: 0.2s;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Tenant Applications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
 
-.back-icon:hover {
-    color: #1b4d97;
-    transform: translateX(-4px);
-}
+        .back-icon {
+            display: inline-block;
+            margin: 15px 20px;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #000000;
+            transition: 0.2s;
+        }
 
-.top-header {
-      top: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 15px 18px;
-      font-size: 20px;
-      font-weight: bold;
-      border-bottom: 1px solid white ;
-    }
-.active{
-    margin-left: 40px; 
-}
+        .back-icon:hover {
+            color: #418beb;
+            transform: translateX(-4px);
+        }
 
-.tabs {
-    display: flex;
-    gap: 390px;
-    margin-top: 90px;
-    margin-bottom: 10px;
-    
-}
-.tabs button {
-    padding: 10px 20px;
-    border: none;
-    background: #7b56b2;
-    border-radius: 50px;
-    font-size: 15px;
-    cursor: pointer;
-}
-.tabs button span {
-    background: #aca6a6;
-    padding: 2px 8px;
-    border-radius: 30px;
-}
-.tabs .active {
-    background: #7b56b2;
-    color: white;
-}
+        .top-header {
+            background: white;
+            padding: 20px 30px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
 
-.application-card {
-    background: white;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
-    margin-bottom: 30px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.status {
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    text-transform: capitalize;
-}
-.status.pending {
-    background: #ffcc33;
-}
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-.tenant-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-.emoji {
-    background: #b87dd32d;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-}
+        .tabs button {
+            padding: 12px 24px;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-.doc-list {
-    list-style: none;
-    padding: 0;
-}
-.doc-list li {
-    background: #f0f2f5;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 6px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.download {
-    cursor: pointer;
-    font-size: 20px;
-}
+        .tabs button:hover {
+            transform: translateY(-2px);
+        }
 
-.note {
-    background: #f0f2f5;
-    padding: 12px;
-    border-radius: 10px;
-}
+        .tabs button.active {
+            background: #418beb;
+            color: white;
+        }
 
-.actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-}
-.reject {
-    background: #e74c3c;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-}
-.accept {
-    background: #2ecc71;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-}
-</style>
+        .application-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .application-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tenant-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 20px;
+            align-items: start;
+            margin: 20px 0;
+        }
+
+        .emoji {
+            background: #eef2ff;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+        }
+
+        .tenant-details h4 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .tenant-details p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .message-box {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #418beb;
+        }
+
+        .message-box h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .message-box p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reject-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background: #dc2626;
+        }
+
+        .accept-btn {
+            background: #2b9446;
+            color: white;
+        }
+
+        .accept-btn:hover {
+            background: #236d38;
+        }
+
+        .no-applications {
+            background: white;
+            padding: 60px;
+            text-align: center;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .no-applications-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .no-applications h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .no-applications p {
+            margin: 0;
+            color: #666;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
 </head>
 <body>
-<a href="dashboard.php" class="back-icon">⬅</a>
-<div class="top-header"><h3>Tenant Applications</h3></div>
-<div class="tabs">
-    <button class="active">Pending</button>
-    <button>Accepted</button>
-    <button>Rejected</button>
-</div>
-
-<?php foreach($applications as $app): ?>
-    <?php $docs = $controllers->getDocuments($app['id']); ?>
-    <div class="application-card">
-        <div class="header">
-            <h2><?php echo htmlspecialchars($app['property_name']); ?></h2>
-            <span class="status <?php echo strtolower($app['status']); ?>"><?php echo ucfirst($app['status']); ?></span>
-        </div>
-        <p>Submitted on: <?php echo $app['submited_at']; ?></p>
-
-        <h3>Tenant Information</h3>
-        <div class="tenant-info">
-            <div class="emoji">👤</div>
-            <div>
-                <h4><?php echo htmlspecialchars($app['tenant_name']); ?></h4>
-                <p><?php echo htmlspecialchars($app['tenant_address']); ?></p>
-                <p>Email: <?php echo htmlspecialchars($app['tenant_email']); ?></p>
-                <p>Phone: <?php echo htmlspecialchars($app['tenant_phone']); ?></p>
-            </div>
-        </div>
-
-        <h3>Submitted Documents</h3>
-        <ul class="doc-list">
-            <?php foreach($docs as $doc): ?>
-                <li>
-                    <?php echo htmlspecialchars($doc['file_name']); ?> 
-                    <a href="<?php echo htmlspecialchars($doc['file_path']); ?>" target="_blank" class="download">⬇</a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <form class="upload-form" action="" method="POST" enctype="multipart/form-data">
-            <input type="file" name="document" required>
-            <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
-            <button type="submit">Upload Document</button>
-        </form>
-
-        <h3>Additional Note</h3>
-        <p class="note"><?php echo htmlspecialchars($app['note']); ?></p>
-
-        <div class="actions">
-            <form action="" method="POST" style="display:inline-block;">
-                <input type="hidden" name="status_change" value="1">
-                <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
-                <input type="hidden" name="status" value="rejected">
-                <button class="reject">Reject</button>
-            </form>
-            <form action="" method="POST" style="display:inline-block;">
-                <input type="hidden" name="status_change" value="1">
-                <input type="hidden" name="application_id" value="<?php echo $app['id']; ?>">
-                <input type="hidden" name="status" value="accepted">
-                <button class="accept">Accept</button>
-            </form>
-        </div>
+    <a href="index.php?url=LandlordController/landlordDashboard" class="back-icon">←</a>
+    
+    <div class="top-header">
+        <h3>📋 Tenant Applications</h3>
     </div>
-<?php endforeach; ?>
+
+    <div class="container">
+        <?php if(isset($_SESSION['success'])): ?>
+            <div class="alert alert-success">
+                <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if(isset($_SESSION['error'])): ?>
+            <div class="alert alert-error">
+                <?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="tabs">
+            <button class="active" onclick="filterApplications('all')">All Applications</button>
+            <button onclick="filterApplications('pending')">Pending</button>
+            <button onclick="filterApplications('accepted')">Accepted</button>
+            <button onclick="filterApplications('rejected')">Rejected</button>
+        </div>
+
+        <?php if (!empty($applications)): ?>
+            <?php foreach($applications as $app): ?>
+                <div class="application-card" data-status="<?= strtolower($app['status']) ?>">
+                    <div class="header">
+                        <div>
+                            <h2><?= htmlspecialchars($app['title']) ?></h2>
+                            <p>📍 <?= htmlspecialchars($app['city']) ?></p>
+                            <p>💰 <?= number_format($app['monthly_rent'], 0) ?> EGP/month</p>
+                            <p>📅 Applied: <?= date('M d, Y', strtotime($app['applied_at'])) ?></p>
+                        </div>
+                        <span class="status <?= strtolower($app['status']) ?>">
+                            <?= ucfirst($app['status']) ?>
+                        </span>
+                    </div>
+
+                    <div class="tenant-info">
+                        <div class="emoji">👤</div>
+                        <div class="tenant-details">
+                            <h4><?= htmlspecialchars($app['tenant_name']) ?></h4>
+                            <p>📧 Email: <?= htmlspecialchars($app['tenant_email']) ?></p>
+                            <p>📱 Phone: <?= htmlspecialchars($app['tenant_phone']) ?></p>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($app['message'])): ?>
+                        <div class="message-box">
+                            <h4>💬 Message from Tenant:</h4>
+                            <p><?= nl2br(htmlspecialchars($app['message'])) ?></p>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($app['status'] === 'pending'): ?>
+                        <div class="actions">
+                            <form method="POST" action="index.php?url=LandlordController/updateApplicationStatus" style="display: inline;">
+                                <input type="hidden" name="application_id" value="<?= $app['application_id'] ?>">
+                                <input type="hidden" name="status" value="rejected">
+                                <button type="submit" class="btn reject-btn" onclick="return confirm('Are you sure you want to reject this application?')">
+                                    ❌ Reject
+                                </button>
+                            </form>
+                            <form method="POST" action="index.php?url=LandlordController/updateApplicationStatus" style="display: inline;">
+                                <input type="hidden" name="application_id" value="<?= $app['application_id'] ?>">
+                                <input type="hidden" name="status" value="accepted">
+                                <button type="submit" class="btn accept-btn" onclick="return confirm('Are you sure you want to accept this application?')">
+                                    ✅ Accept
+                                </button>
+                            </form>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="no-applications">
+                <div class="no-applications-icon">📭</div>
+                <h3>No Applications Yet</h3>
+                <p>When tenants apply to your properties, they will appear here.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <script>
+        function filterApplications(status) {
+            const cards = document.querySelectorAll('.application-card');
+            const buttons = document.querySelectorAll('.tabs button');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
