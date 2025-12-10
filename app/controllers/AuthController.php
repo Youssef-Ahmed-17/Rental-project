@@ -2,6 +2,11 @@
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../core/Controller.php';
 
+// Session check at the top
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 class AuthController extends Controller {
 
     private $baseUrl = "/Rental_project/public/?url=";
@@ -11,8 +16,6 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        session_start();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $email = $_POST['email'] ?? '';
@@ -20,19 +23,22 @@ class AuthController extends Controller {
 
             $userModel = $this->model('User');
 
-            // البحث عن المستخدم بالبريد
+            // Search for user by email
             $stmt = $userModel->db->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
 
-                // حفظ بيانات السيشن
+                // Regenerate session ID for security
+                session_regenerate_id(true);
+
+                // Save session data
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['role']   = $user['role'];
                 $_SESSION['name']   = $user['name'];
 
-                // توجيه حسب الدور
+                // Redirect based on role
                 switch ($user['role']) {
 
                     case 'tenant':
@@ -54,19 +60,18 @@ class AuthController extends Controller {
 
             } else {
 
-                // بيانات خاطئة
+                // Invalid credentials
                 $data = ['error' => 'Invalid email or password'];
                 $this->view('auth/login', $data);
             }
 
         } else {
-            // GET - إظهار صفحة تسجيل الدخول
+            // GET - Show login page
             $this->view('auth/login');
         }
     }
 
     public function logout() {
-        session_start();
         session_unset();
         session_destroy();
         header("Location: " . $this->baseUrl . "AuthController/login");
@@ -76,13 +81,13 @@ class AuthController extends Controller {
     public function store() {
         $user = new User();
 
-        // التحقق من البريد
+        // Check if email exists
         if ($user->emailExists($_POST['email'])) {
-            header("Location: /Rental_project/public/AuthController/register?error=Email already exists");
+            header("Location: /Rental_project/public/?url=AuthController/register&error=Email already exists");
             exit();
         }
 
-        // إنشاء مستخدم
+        // Create user
         $created = $user->create([
             "role"        => $_POST['role'],
             "name"        => $_POST['name'],
@@ -93,14 +98,14 @@ class AuthController extends Controller {
             "phone"       => $_POST['phone']
         ]);
 
-        // نجاح
+        // Success
         if ($created) {
-            header("Location: /Rental_project/public/AuthController/login");
+            header("Location: /Rental_project/public/?url=AuthController/login");
             exit();
         }
 
-        // فشل
-        header("Location: /Rental_project/public/AuthController/register?error=Failed to create user");
+        // Failed
+        header("Location: /Rental_project/public/?url=AuthController/register&error=Failed to create user");
         exit();
     }
 }

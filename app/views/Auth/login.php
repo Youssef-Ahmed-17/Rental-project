@@ -94,43 +94,55 @@ input:focus {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(80,0,255,0.4);
 } 
+
 .tabs {
-            display: flex;
-            margin: 15px 0;
-            background: #eaeaea;
-            padding: 5px;
-            border-radius: 40px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            text-align: center;
-            text-decoration: none;
-            color: black;
-            font-weight: 500;
-            background: transparent;
-            border-radius: 40px;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background: #3c00ff;
-            color: white;
-            transform: scale(1.05);
-        }
-        .tab:hover {
-             background: #e0d4ff;
-             border-radius: 40px;
-             cursor: pointer;
+    display: flex;
+    margin: 15px 0;
+    background: #eaeaea;
+    padding: 5px;
+    border-radius: 40px;
 }
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    background: transparent;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #3c00ff;
+    color: white;
+    transform: scale(1.05);
+}
+
+.tab:hover {
+    background: #e0d4ff;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
 .forgot {
     display: block;
     margin-top: 8px;
     color: #3c00ff;
     text-align: right;
     font-size: 13px;
+}
+
+.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
 }
 </style>
 </head>
@@ -145,32 +157,28 @@ input:focus {
             <p class="desc">Sign in to your account or create a new one</p>
 
             <div class="tabs">
-             <button class="tab active">Login</button>
-              <a class="tab" href="register.php">Register</a>
-         </div>
+                <button class="tab active">Login</button>
+                <a class="tab" href="?url=AuthController/register">Register</a>
+            </div>
    
-            
-       <form method="POST" action="?url=AuthController/login">
+            <form method="POST" action="?url=AuthController/login">
 
-    <?php if(!empty($error)): ?>
-        <div style="color:red; margin-bottom:10px;">
-            <?= $error ?>
-        </div>
-    <?php endif; ?>
+                <?php if(!empty($error)): ?>
+                    <div class="error">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
 
-    <label>Email</label>
-    <input type="email" name="email" placeholder="Enter your email" required>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
 
-    <label>Password</label>
-    <input type="password" name="password" placeholder="Enter your password" required>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
 
-    <a href="#" class="forgot">Forgot your password?</a>
+                <a href="#" class="forgot">Forgot your password?</a>
 
-    <button type="submit" class="login-btn">Login</button>
-</form>
-
-            
-
+                <button type="submit" class="login-btn">Login</button>
+            </form>
         </div>
     </div>
 </body>

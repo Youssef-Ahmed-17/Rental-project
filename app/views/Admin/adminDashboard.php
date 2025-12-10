@@ -60,7 +60,8 @@
     font-size: 20px;
     font-weight: bold;
     color: black;
-}.buttons-row {
+}
+.buttons-row {
     margin-top: 35px;
     display: flex;
     gap: 30px;
@@ -80,6 +81,9 @@
     font-weight: bold;
     transition: .2s;
     width: 90%;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .accept-btn { background: #418beb;}
@@ -87,7 +91,8 @@
 .list-btn{ background: #2361be; }
 
 .btn:hover {
-    filter: brightness(0.85);}
+    filter: brightness(0.85);
+}
 </style>
 </head>
 
@@ -96,7 +101,7 @@
     <!-- Admin Header -->
     <div class="fcard">
         <h1>Admin Dashboard</h1>
-        <h5 style=" margin-left: 30px;">Welcome back, <?= $_SESSION['user']['name'] ?></h5>
+        <h5 style="margin-left: 30px;">Welcome back, <?= htmlspecialchars($_SESSION['name'] ?? 'Admin') ?></h5>
     </div>
 
 
@@ -107,16 +112,16 @@
        <div class="card">
             <div class="icon req">👤</div>
             <div>
-                <p class="title">Landlord Requests</p>
-                <p class="number"><?= $landlordReq ?></p>
+                <p class="title">Pending Requests</p>
+                <p class="number"><?= $pendingRequests ?? 0 ?></p>
             </div>
         </div>
 
         <div class="card">
             <div class="icon acc">✔</div>
             <div>
-                <p class="title">Accepted Posts</p>
-                <p class="number"><?= $approvedPosts ?></p>
+                <p class="title">Approved Posts</p>
+                <p class="number"><?= $approvedPosts ?? 0 ?></p>
             </div>
         </div>
   </div>
@@ -126,7 +131,7 @@
             <div class="icon req">👥</div>
             <div>
                 <p class="title">Registered Users</p>
-                <p class="number"><?= $registeredUsers ?></p>
+                <p class="number"><?= $registeredUsers ?? 0 ?></p>
             </div>
         </div>
 
@@ -134,7 +139,7 @@
             <div class="icon post">💬</div>
             <div>
                 <p class="title">Total Posts</p>
-                <p class="number"><?= $totalPosts ?></p>
+                <p class="number"><?= ($approvedPosts ?? 0) + ($inactivePosts ?? 0) + ($removedPosts ?? 0) ?></p>
             </div>
         </div>
    </div>
@@ -144,7 +149,7 @@
             <div class="icon Inpost">❌</div>
             <div>
                 <p class="title">Inactive Posts</p>
-                <p class="number"><?= $inactivePosts ?></p>
+                <p class="number"><?= $inactivePosts ?? 0 ?></p>
             </div>
         </div>
 
@@ -152,17 +157,17 @@
             <div class="icon rev">🗑</div>
             <div>
                 <p class="title">Removed Posts</p>
-                <p class="number"><?= $removedPosts ?></p>
+                <p class="number"><?= $removedPosts ?? 0 ?></p>
             </div>
-                </div>
+        </div>
     </div>
 
 </div>
 
 <div class="buttons-row">
-    <a class="btn accept-btn" href="index.php?action=requests">👤 Accept/Reject Landlord Requests</a>
-    <a class="btn post-btn" href="index.php?action=managePosts">🧩 Manage Posts (Accept / Reject)</a>
-    <a class="btn list-btn" href="index.php?action=listUsers">≡ List Users</a>
+    <a class="btn accept-btn" href="?url=AdminController/manageRequests">👤 Accept/Reject Landlord Requests</a>
+    <a class="btn post-btn" href="?url=AdminController/managePosts">🧩 Manage Posts (Accept / Reject)</a>
+    <a class="btn list-btn" href="?url=AdminController/manageUsers">≡ List Users</a>
 </div>
 
 </body>
